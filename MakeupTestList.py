@@ -1,9 +1,9 @@
-# @File    :   UpdateTestResult.py
-# @Time    :   2019/08/25 12:27:28
+# @File    :   MakeupTestList.py
+# @Time    :   2019/08/25 22:51:28
 # @Author  :   Wei Luo 
 # @Version :   1.0
 # @Contact :   luoweihoo@yahoo.com
-# @Desc    :   Update the test of each ramp-up session
+# @Desc    :   Generate the make-up test list of a workshop
 
 import openpyxl, sys
 from openpyxl.utils import get_column_letter
@@ -53,32 +53,18 @@ workshopCol = str(workshop[2])
 # print(workshop[1])
 # print(workshop[2])
 
-# Open the test result of this workshop
-resultWb = workshopNum + '_' + 'testresult.xlsx'
-try:
-    testwb = openpyxl.load_workbook(resultWb)
-except FileNotFoundError:
-    print(f"The {resultWb} doesn't exist, please check!")
-    sys.exit()
+# Generate the make-up test list and save it to a seperate .xlsx file
+makeupList = str(workshop[0]) + '_' + 'MakeupTestList.xlsx'
+listWb = openpyxl.Workbook()
+listSheet = listWb.active
+listRow = 1
+for row in range(4, sheet.max_row + 1):
+    if sheet[workshopCol + str(row)].value == None:
+        pass
+    elif sheet[workshopCol + str(row)].value == 'X' or sheet[workshopCol + str(row)].value == 'X*' or int(sheet[workshopCol + str(row)].value) < 60:
+        listSheet['A' + str(listRow)].value = sheet['A' + str(row)].value
+        listSheet['B' + str(listRow)].value = sheet['B' + str(row)].value
+        listRow = listRow + 1
 
-testSheet = testwb.active
-testResult = []
-for row in range(3,testSheet.max_row + 1):
-    testRow = []
-    testRow.append(testSheet['C' + str(row)].value[1:])
-    testRow.append(testSheet['B' + str(row)].value[1:])
-    score = testSheet['F' + str(row)].value[1:]
-    testRow.append(score[:-1])
-    testResult.append(testRow)
-
-# print(testResult)
-# print(workshopCol)
-
-# Update the test resule into the tracking list
-for result in testResult:
-    for row in range(4, sheet.max_row + 1):
-        if sheet['A' + str(row)].value == result[0]:
-            sheet[workshopCol + str(row)].value = result[2]
-
-wb.save(trackList)
+listWb.save(makeupList)
 print('Processing is finished!')
