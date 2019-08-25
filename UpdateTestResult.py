@@ -1,0 +1,85 @@
+# @File    :   UpdateTestResult.py
+# @Time    :   2019/08/25 12:27:28
+# @Author  :   Wei Luo 
+# @Version :   1.0
+# @Contact :   luoweihoo@yahoo.com
+# @Desc    :   Update the test of each ramp-up session
+
+import openpyxl, sys
+
+trackList = 'Team Ramp-up Tracking.xlsx'
+
+# Check if the track list is in the current folder; if yes open it
+print('Opening workbook...')
+try:
+    wb = openpyxl.load_workbook(trackList)
+except FileNotFoundError:
+    print(f"The track list {trackList} doesn't exist, please check!")
+
+# Build the workshop list
+sheet = wb.active
+workshopList = []
+for cell in sheet[2]:
+    if '.' in str(cell.value):
+        cellString = str(cell.value).split('.')
+        cellString.append(cell.coordinate)
+        workshopList.append(cellString)
+    
+# Ask user to enter the No. of the workshop
+rawInput = input("Please enter the number of the workshop!\n e.g. 1, 2..., 'q' to quit program:")
+if str(rawInput).upper() == 'Q':
+    sys.exit()
+
+# Confirm the chosen workshop
+workshopNum = str(rawInput)
+for workshop in workshopList:
+    if workshopNum == workshop[0]:
+        print(f"The workshop you chose is {workshop[1].lstrip()}.")
+        rawInput = input("Please confirm the action? Y or N:")
+        if str(rawInput).upper() == 'N':
+            sys.exit()
+        else:
+            break
+
+# The chosen workshop
+# print(workshopNum)
+# print(workshop[1])
+# print(workshop[2])
+
+# Open the test result of this workshop
+resultWb = workshopNum + '_' + 'testresult.xlsx'
+workshopCol = workshop[2]
+try:
+    testwb = openpyxl.load_workbook(resultWb)
+except FileNotFoundError:
+    print(f"The {resultWb} doesn't exist, please check!")
+    sys.exit()
+
+testSheet = testwb.active
+testResult = []
+for row in range(3,testSheet.max_row + 1):
+    testRow = []
+    testRow.append(testSheet['C' + str(row)].value[1:])
+    testRow.append(testSheet['B' + str(row)].value[1:])
+    score = testSheet['F' + str(row)].value[1:]
+    testRow.append(score[:-1])
+    testResult.append(testRow)
+
+print(testResult)
+print(workshopCol)
+
+# Update the test resule into the tracking list
+for result in testResult:
+    for row in range(4, sheet.max_row + 1):
+        if sheet['A' + str(row)].value == result[0]:
+            sheet[workshopCol + str(row)].value = result[2]
+
+wb.save(trackList)
+
+
+
+
+
+        
+
+
