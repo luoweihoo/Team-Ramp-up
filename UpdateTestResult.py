@@ -7,6 +7,8 @@
 
 import openpyxl, sys
 from openpyxl.utils import get_column_letter
+from openpyxl.styles import Font
+from openpyxl.styles.colors import BLACK
 
 trackList = 'Team Ramp-up Tracking.xlsx'
 
@@ -78,6 +80,7 @@ for row in range(3,testSheet.max_row + 1):
 for result in testResult:
     for row in range(4, sheet.max_row + 1):
         if sheet['A' + str(row)].value == result[0]:
+            sheet[workshopCol + str(row)].font = Font(color = BLACK)
             sheet[workshopCol + str(row)].value = result[2]
 
 wb.save(trackList)
