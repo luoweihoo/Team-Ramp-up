@@ -1,12 +1,14 @@
-# @File    :   UpdateTestResult.py
-# @Time    :   2019/08/25 12:27:28
+# @File    :   UpdateMakeupTestResult.py
+# @Time    :   2019/08/26 09:18:40
 # @Author  :   Wei Luo 
 # @Version :   1.0
 # @Contact :   luoweihoo@yahoo.com
-# @Desc    :   Update the test of each ramp-up session
+# @Desc    :   Update the result from the make-up test, the difference 1. read data from seperate Execl; 2. hight the score in red color
 
 import openpyxl, sys
 from openpyxl.utils import get_column_letter
+from openpyxl.styles import Font
+from openpyxl.styles.colors import RED
 
 trackList = 'Team Ramp-up Tracking.xlsx'
 
@@ -53,8 +55,8 @@ workshopCol = str(workshop[2])
 # print(workshop[1])
 # print(workshop[2])
 
-# Open the test result of this workshop
-resultWb = workshopNum + '_' + 'TestResult.xlsx'
+# Open the makeup test result of this workshop
+resultWb = workshopNum + '_' + 'MakeupTestResult.xlsx'
 try:
     testwb = openpyxl.load_workbook(resultWb)
 except FileNotFoundError:
@@ -78,6 +80,7 @@ for row in range(3,testSheet.max_row + 1):
 for result in testResult:
     for row in range(4, sheet.max_row + 1):
         if sheet['A' + str(row)].value == result[0]:
+            sheet[workshopCol + str(row)].font = Font(color = RED)
             sheet[workshopCol + str(row)].value = result[2]
 
 wb.save(trackList)
