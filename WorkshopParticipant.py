@@ -1,9 +1,9 @@
-# @File    :   MakeupTestList.py
+# @File    :   WorkshopParticipant.py
 # @Time    :   2019/08/25 22:51:28
 # @Author  :   Wei Luo 
 # @Version :   1.0
 # @Contact :   luoweihoo@yahoo.com
-# @Desc    :   Generate the make-up test list of a workshop
+# @Desc    :   Generate the participant list of a workshop
 
 import openpyxl, sys
 from openpyxl.utils import get_column_letter
@@ -54,7 +54,7 @@ workshopCol = str(workshop[2])
 # print(workshop[2])
 
 # Generate the make-up test list and save it to a seperate .xlsx file
-makeupList = str(workshop[0]) + '_' + 'MakeupList.xlsx'
+makeupList = str(workshop[0]) + '_' + 'List.xlsx'
 listWb = openpyxl.Workbook()
 listSheet = listWb.active
 listRow = 1
