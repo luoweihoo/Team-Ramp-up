@@ -61,7 +61,7 @@ listRow = 1
 for row in range(4, sheet.max_row + 1):
     if sheet[workshopCol + str(row)].value == None:
         pass
-    elif sheet[workshopCol + str(row)].value == 'X' or sheet[workshopCol + str(row)].value == 'X*' or int(sheet[workshopCol + str(row)].value) < 60:
+    elif sheet[workshopCol + str(row)].value == 'X' or sheet[workshopCol + str(row)].value == 'X*':
         listSheet['A' + str(listRow)].value = sheet['A' + str(row)].value
         listSheet['B' + str(listRow)].value = sheet['B' + str(row)].value
         listRow = listRow + 1
