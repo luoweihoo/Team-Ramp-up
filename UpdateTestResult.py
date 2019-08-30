@@ -9,6 +9,7 @@ import openpyxl, sys
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font
 from openpyxl.styles.colors import BLACK
+from openpyxl.styles.colors import RED
 
 trackList = 'Team Ramp-up Tracking.xlsx'
 
@@ -38,6 +39,7 @@ if str(rawInput).upper() == 'Q':
 
 # Confirm the chosen workshop
 workshopNum = str(rawInput)
+flagFound = 'N'
 for workshop in workshopList:
     if workshopNum == workshop[0]:
         print(f"The workshop you chose is '{workshop[1].lstrip()}'.")
@@ -45,7 +47,12 @@ for workshop in workshopList:
         if str(rawInput).upper() == 'N':
             sys.exit()
         else:
+            flagFound = 'Y'
             break
+# Not able to find any workshop as per the input
+if flagFound == 'N':
+    print("There's no such workshop, please check!")
+    sys.exit()
 
 # Record the column name in which the workshop is in
 workshopCol = str(workshop[2])
@@ -55,8 +62,19 @@ workshopCol = str(workshop[2])
 # print(workshop[1])
 # print(workshop[2])
 
+# Check wether it's a make-up test
+rawInput = input("Is this a result from a Make-up Test? Y or N:")
+if str(rawInput).upper() == 'N':
+    flagMakeUpTest = 'N'
+else:
+    flagMakeUpTest = 'Y'
+
 # Open the test result of this workshop
-resultWb = workshopNum + '_' + 'TestResult.xlsx'
+if flagMakeUpTest == 'N':
+    resultWb = workshopNum + '_' + 'Result.xlsx'
+else:
+    resultWb = workshopNum + '_' + 'MakeUpResult.xlsx'
+
 try:
     testwb = openpyxl.load_workbook(resultWb)
 except FileNotFoundError:
@@ -80,7 +98,10 @@ for row in range(3,testSheet.max_row + 1):
 for result in testResult:
     for row in range(4, sheet.max_row + 1):
         if sheet['A' + str(row)].value == result[0]:
-            sheet[workshopCol + str(row)].font = Font(color = BLACK)
+            if flagMakeUpTest == 'N':
+                sheet[workshopCol + str(row)].font = Font(color = BLACK)
+            else:
+                sheet[workshopCol + str(row)].font = Font(color = RED)
             sheet[workshopCol + str(row)].value = result[2]
 
 wb.save(trackList)
