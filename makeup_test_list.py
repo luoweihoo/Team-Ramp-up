@@ -17,7 +17,7 @@ workshopList = trfunction.buildWorkshopList(wb)
 workshopNum, workshopCol = trfunction.chooseWorkshop(workshopList)
 
 # Generate the make-up test list and save it to a seperate .xlsx file
-participantList = str(workshopNum) + '_' + 'MakeupList.xlsx'
+makeupList = str(workshopNum) + '_' + 'MakeupList.xlsx'
 listWb = openpyxl.Workbook()
 listSheet = listWb.active
 listRow = 1
@@ -30,5 +30,5 @@ for row in range(4, sheet.max_row + 1):
         listSheet['B' + str(listRow)].value = sheet['B' + str(row)].value
         listRow = listRow + 1
 
-listWb.save(participantList)
+listWb.save(makeupList)
 print('Processing is finished!')
