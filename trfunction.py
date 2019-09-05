@@ -72,7 +72,7 @@ def openTestResult(workshopNum):
     if isMakeupTest == 'N':
         resultWb = workshopNum + '_' + 'Result.xlsx'
     else:
-        resultWb = workshopNum + '_' + 'MakeUpResult.xlsx'
+        resultWb = workshopNum + '_' + 'MakeupResult.xlsx'
 
     try:
         testwb = openpyxl.load_workbook(resultWb)
