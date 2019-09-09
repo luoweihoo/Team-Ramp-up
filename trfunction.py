@@ -92,3 +92,60 @@ def openTestResult(workshopNum):
     
     return testResult, isMakeupTest
 
+# Build the summary table groupping by the manager's name
+def buildSummaryList(workbook):
+    groups = { 'grp1' : 'Yuedong Chen',
+             'grp2' : 'Meng Zhang',
+             'grp3' : 'Chuanyu Wang', 
+             'grp4' : 'Pan Zhensheng'}
+
+    sheet = workbook.active
+    summaryList = []
+    for k, v in groups.items():
+        listRow = []
+        listRow.append(v)
+        listRow.append(int(0))       # Number of notified
+        listRow.append(int(0))       # Number of quiz taken
+        listRow.append(int(0))       # Number of passed (original test + makeup test, score >= 60)
+        listRow.append(int(0))       # Number of failed
+        summaryList.append(listRow)
+
+#    print(summaryList)
+
+    rowStart = 4
+    colStart = 9
+    for rowNum in range(rowStart, sheet.max_row + 1):
+        # Check if the direct report manager is defined in our groups
+        managerName = sheet['F' + str(rowNum)].value
+        if  managerName in groups.values():
+            for listRow in summaryList:
+                # Search the record with manager's name
+                if listRow[0] != managerName:
+                    pass
+                else:
+                    for colNum in range(colStart, sheet.max_column + 1):
+                        cellValue = sheet.cell(row = rowNum, column = colNum).value
+                        if cellValue is None:
+                            pass
+                        elif cellValue == 'X*':
+                            pass                
+                        elif cellValue == 'X':
+                            listRow[1] += 1
+                        elif int(cellValue) >= 60:
+                            listRow[1] += 1
+                            listRow[2] += 1
+                            listRow[3] += 1
+                        elif int(cellValue) < 60:
+                            listRow[1] += 1
+                            listRow[2] += 1
+                            listRow[4] += 1
+                        else:
+                            pass
+        else:
+            pass
+
+    print(summaryList)
+
+    return summaryList
+
+
