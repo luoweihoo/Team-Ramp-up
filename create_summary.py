@@ -25,7 +25,7 @@ listWb = openpyxl.Workbook()
 listSheet = listWb.active
 
 listSheet['A1'] = 'Manager'
-listSheet['B1']  = '# of Notified'
+listSheet['B1']  = '# of Nominated'
 listSheet['C1']  = '# Quiz Taken'
 listSheet['D1']  = '# Passed'
 listSheet['E1']  = '# Failed'

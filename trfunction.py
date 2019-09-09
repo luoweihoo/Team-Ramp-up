@@ -104,10 +104,10 @@ def buildSummaryList(workbook):
     for k, v in groups.items():
         listRow = []
         listRow.append(v)
-        listRow.append(int(0))       # Number of notified
-        listRow.append(int(0))       # Number of quiz taken
-        listRow.append(int(0))       # Number of passed (original test + makeup test, score >= 60)
-        listRow.append(int(0))       # Number of failed
+        listRow.append(0)       # Number of Nominated
+        listRow.append(0)       # Number of quiz taken
+        listRow.append(0)       # Number of passed (original test + makeup test, score >= 60)
+        listRow.append(0)       # Number of failed
         summaryList.append(listRow)
 
 #    print(summaryList)
@@ -121,30 +121,30 @@ def buildSummaryList(workbook):
             for listRow in summaryList:
                 # Search the record with manager's name
                 if listRow[0] != managerName:
-                    pass
+                    continue
                 else:
                     for colNum in range(colStart, sheet.max_column + 1):
                         cellValue = sheet.cell(row = rowNum, column = colNum).value
                         if cellValue is None:
-                            pass
+                            continue
                         elif cellValue == 'X*':
-                            pass                
+                            continue                
                         elif cellValue == 'X':
-                            listRow[1] += 1
+                            listRow[1] += 1         # Count 1 more in # of nominated
                         elif int(cellValue) >= 60:
-                            listRow[1] += 1
-                            listRow[2] += 1
-                            listRow[3] += 1
+                            listRow[1] += 1         # Count 1 more in # of nominated
+                            listRow[2] += 1         # Count 1 more in # of quiz taken
+                            listRow[3] += 1         # Count 1 more in # of passed
                         elif int(cellValue) < 60:
-                            listRow[1] += 1
-                            listRow[2] += 1
-                            listRow[4] += 1
+                            listRow[1] += 1         # Count 1 more in # of nominated
+                            listRow[2] += 1         # Count 1 more in # of quiz taken
+                            listRow[4] += 1         # Count 1 more in # of failed
                         else:
-                            pass
+                            continue
         else:
-            pass
+            continue
 
-    print(summaryList)
+#    print(summaryList)
 
     return summaryList
 
